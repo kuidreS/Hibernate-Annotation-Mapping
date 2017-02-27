@@ -4,9 +4,12 @@ import bl.HibernateUtil;
 import entity.Address;
 import entity.Employee;
 import entity.Project;
-import org.hibernate.Session;
+import service.AddressService;
+import service.EmployeeService;
+import service.ProjectService;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -14,10 +17,10 @@ import java.util.*;
  */
 public class Domain {
 
-    public static void main(String[] args) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        session.beginTransaction();
+    public static void main(String[] args) throws SQLException {
+        AddressService addressService = new AddressService();
+        EmployeeService employeeService = new EmployeeService();
+        ProjectService projectService = new ProjectService();
 
         Address address = new Address();
         address.setCountry("DC");
@@ -46,11 +49,10 @@ public class Domain {
         projects.add(project);
         employee.setProjects(projects);
 
-        session.save(address);
-        session.save(project);
-        session.save(employee);
+        addressService.add(address);
+        employeeService.add(employee);
+        projectService.add(project);
 
-        session.getTransaction().commit();
         HibernateUtil.shutdown();
     }
 
